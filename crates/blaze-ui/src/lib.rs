@@ -379,6 +379,8 @@ impl Build {
                 self.cores_of = *of;
                 Change::Nothing
             }
+            // The build page's (docs/web.md).
+            Event::Functions { .. } => Change::Nothing,
         }
     }
 
