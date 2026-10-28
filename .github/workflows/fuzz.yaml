@@ -42,7 +42,7 @@ jobs:
   bench:
     needs: build
     runs-on: ubuntu-24.04
-    timeout-minutes: 300
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v7
         with:
@@ -64,7 +64,7 @@ jobs:
           for round in 1 2; do
             for arm in base scripts names; do
               BLAZE_BIN="$PWD/bin/$arm/blaze-engine" BLAZE_BENCH_COMMIT="$arm" BLAZE_BENCH_MACHINE="gh ubuntu-24.04" \
-                nix develop --command python3 harness/bench.py ripgrep cargo --runs 3 --out "results/$arm-$round.json" --work "$RUNNER_TEMP/work-$arm-$round" \
+                nix develop --command python3 harness/bench.py ripgrep cargo --backend cranelift --runs 3 --cold-runs 2 --out "results/$arm-$round.json" --work "$RUNNER_TEMP/work-$arm-$round" \
                 > "results/$arm-$round.log" 2>&1 || echo "$arm round $round: exit $?" | tee -a results/failed.txt
               tail -30 "results/$arm-$round.log"
             done
